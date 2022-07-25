@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  server:
+    build: .
+    container_name: server
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8000:80"
+    volumes:
+      - ./php/src:/var/www/html/
+      - /var/www/html/vendor/
+  db:
+    container_name: db
+    image: mysql:latest
+    restart: always
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    volumes:
+      - ${MYSQL_DATA_DIR}:/var/lib/mysql
+      - ${MYSQL_LOG_DIR}:/var/log/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
